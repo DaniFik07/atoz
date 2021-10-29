@@ -14,11 +14,12 @@ module.exports = function verifyToken(req, res, next) {
     // Decoded JWT
     jwt.verify(bearerToken, "ATOZ", (err, decoded) => {
       if (err) {
-        res.send(
-          JSON.stringify({
+        res.json(
+          {
             success: "False",
-            msg: "Authentikasi Token gagal"
-          })
+            msg: "Authentikasi Token gagal",
+            link: "http://localhost/atoz/view/home.html"
+          }
         );
         console.log('Unauthorized Token');
       } else {

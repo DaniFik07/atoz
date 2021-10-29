@@ -4,7 +4,7 @@
   "description": "PT Tema rekayasa digital",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "deploy": "node server.js",
     "start": "nodemon server.js"
   },
   "repository": {

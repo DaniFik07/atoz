@@ -27,7 +27,7 @@ router.route("/check_pending").get(Orders.Check_pending);
 router.use(verifyToken);
 // End Setting Middleware
 
-// Check unpaid orders 
+// Check user
 router.route("/check").get(Users.getUser);
 
 // Post Submit 

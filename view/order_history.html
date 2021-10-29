@@ -275,9 +275,12 @@
       url: 'http://localhost:8888/api/check',
       crossDomain: true,
       success: function (data) {
+        if(localStorage.getItem('token') == null){
+          window.location.href = "http://localhost/atoz/view/home.html"
+        }else{
         $('#content').html(data.name);
         $('#unpaid').html(data.data);
-
+        }
       },
       error: function (xhr, ajaxOptions, thrownError) {
         console.log('xHR: ' + xhr);
