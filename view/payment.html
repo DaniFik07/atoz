@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body> <h1>Hello <span id="content"></span></h1>
+    <a href="http://localhost/atoz/view/order_history.html"><h1><span id="unpaid"></span> unpaid order</h1></a>
+    <a href="http://localhost/atoz/view/dashboard.html">
+      <p>Prepaid Balance</p>
+    </a>
+    <a href="http://localhost/atoz/view/product.html">
+      <p>Product Page</p>
+    </a>
+    <h1>Pay Your Order</h1>
+    <form id="idForm" action="http://localhost:8888/api/payment" method="post" target="_blank">
+      <input id="order" type="number" name="ORDER_NO" placeholder="Order No." required /><br>
+      <input type="hidden" name="req" value="login">
+      <input type="submit" id="submit" value="Pay now" />
+    </form>
+      
+   
+  </body>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script>
+  const pathArray = (location.pathname+location.search).substr(1).split("=")
+const segment_1 = pathArray[1];
+console.log(segment_1);
+  $().ready(function () {
+    $.ajax({
+      type: "GET",
+      headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+      url: 'http://localhost:8888/api/check',
+      crossDomain: true,
+      success: function (data) {
+        $('#content').html(data.name);
+        $('#unpaid').html(data.data);
+
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log('xHR: ' + xhr);
+        console.log('ajaxOption: ' + ajaxOptions);
+        console.log('thrownError: ' + thrownError);
+      }
+    });
+  });
+
+  $().ready(function () {
+    $.ajax({
+      type: "GET",
+      headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+      url: 'http://localhost:8888/api/success_page/'+segment_1,
+      crossDomain: true,
+      success: function (data) {
+        $('#order').val(data.data[0]['order_no']);
+        var status = data.data[0]['states'];
+        if(status == 'cancelled'){
+        $('#submit').val('order is not paid within 5 minutes of creation');
+        $("#submit").attr('disabled','disabled');
+
+      }
+      if(status == 'failed'){
+        $('#submit').val(' Balance transaction failed')
+        $("#submit").attr('disabled','disabled');
+      }
+      if(status == 'success'){
+        $('#submit').val('paid')
+        $("#submit").attr('disabled','disabled');
+      }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log('xHR: ' + xhr);
+        console.log('ajaxOption: ' + ajaxOptions);
+        console.log('thrownError: ' + thrownError);
+      }
+    });
+  });
+  
+  $("#idForm").submit(function (e) {
+
+
+var form = $(this);
+var url = form.attr('action');
+
+$.ajax({
+  type: "POST",
+  headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+  url: url,
+  data: form.serialize(), // serializes the form's elements.
+  success: function (data) {
+    window.location.href = "http://localhost/atoz/view/order_history.html";
+    console.log(data); // show response from the php script in console.
+  }
+});
+
+e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+</script>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form id="idForm" action="http://localhost:8888/api/auth" method="post" target="_blank">
+      Name <input type="text" name="EMAIL" required/><br>
+      Password <input type="text" name="PASSWORD" required/><br>
+      <input type="hidden" name="req" value="login">
+      <input type="submit" id="submit" value="Login"/>
+    </form>
+    <a href="http://localhost/atoz/view/register.html"><button>Register</button></a>
+  </body>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script>
+$("#idForm").submit(function(e) {
+
+
+    var form = $(this);
+    var url = form.attr('action');
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+            window.location.href = "http://localhost/atoz/view/dashboard.html";
+            localStorage.setItem("token",data['token']);
+               console.log(data); // show response from the php script in console.
+           }
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+</script>
+</html>
